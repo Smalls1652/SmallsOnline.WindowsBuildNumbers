@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>SmallsOnline.WindowsBuildNumbers.Lib</PackageId>
+    <Authors>Timothy Small</Authors>
+    <Company>Smalls.Online</Company>
+    <RepositoryUrl>https://github.com/Smalls1652/SmalsOnline.WindowsBuildNumbers</RepositoryUrl>
+    <VersionPrefix>0.0.1</VersionPrefix>
+    <Description>
+      A library for getting Windows 10/11 release information.
+    </Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
 </Project>
