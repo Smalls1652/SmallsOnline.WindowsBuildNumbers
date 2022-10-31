@@ -14,7 +14,7 @@ public static class ReleaseParser
     );
 
     private readonly static Regex _releaseTableRegex = new(
-        pattern: @"<tr>\n<td>.+?<\/td>\n<td>(?'releaseDate'\d{4}-\d{2}-\d{2})<\/td>\n<td>(?'buildNumber'.+?)<\/td>\n<td>(?:<a href=""(?'supportArticleUrl'.+?)"".+?>(?'kbArticleId'.+?)<\/a>|)<\/td>\n<\/tr>",
+        pattern: @"<tr>\n<td>(?'servicingChannels'.+?)<\/td>\n<td>(?'releaseDate'\d{4}-\d{2}-\d{2})<\/td>\n<td>(?'buildNumber'.+?)<\/td>\n<td>(?:<a href=""(?'supportArticleUrl'.+?)"".+?>(?'kbArticleId'.+?)<\/a>|)<\/td>\n<\/tr>",
         options: RegexOptions.Compiled
     );
 
