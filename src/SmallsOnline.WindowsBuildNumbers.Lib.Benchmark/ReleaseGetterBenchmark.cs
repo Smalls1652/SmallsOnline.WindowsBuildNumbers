@@ -20,8 +20,8 @@ public class ReleaseGetterBenchmark
     }
 
     [Benchmark]
-    public async Task<List<ReleaseInfo>> GetReleaseInfoWindows10_Benchmark() => await _releaseInfoGetter.GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows10);
+    public async Task<List<ReleaseInfo>> GetReleaseInfoWindows10Async_Benchmark() => await _releaseInfoGetter.GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows10);
 
     [Benchmark]
-    public async Task<List<ReleaseInfo>> GetReleaseInfoWindows11_Benchmark() => await _releaseInfoGetter.GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows11);
+    public async Task<List<ReleaseInfo>> GetReleaseInfoWindows11Async_Benchmark() => await _releaseInfoGetter.GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows11);
 }
