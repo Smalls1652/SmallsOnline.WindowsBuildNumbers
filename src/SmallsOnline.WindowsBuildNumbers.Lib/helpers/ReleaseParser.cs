@@ -9,7 +9,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Helpers;
 public static class ReleaseParser
 {
     private readonly static Regex _releaseRegex = new(
-        pattern: @"<strong>Version (?'versionName'.{4}) \(OS build (?'versionBuild'\d+)\)<\/strong>(?:(?:\n) - (?'isEoL'End of servicing)|)(?:(?s).+?)<table.+?>\n<tr>(?:\s*<th>.+?<\/th>){4}\n\s*<\/tr>(?'tableData'(?s).+?)\n<\/table>",
+        pattern: @"<strong>Version (?'versionName'.{4})(?>\s\(RTM\)|) \(OS build (?'versionBuild'\d+)\)<\/strong>(?:(?:\n) - (?'isEoL'End of servicing)|)(?:(?s).+?)<table.+?>\n<tr>(?:\s*<th>.+?<\/th>){4}\n\s*<\/tr>(?'tableData'(?s).+?)\n<\/table>",
         options: RegexOptions.Compiled
     );
 
