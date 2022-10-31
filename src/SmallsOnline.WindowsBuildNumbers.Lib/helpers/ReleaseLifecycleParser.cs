@@ -10,11 +10,11 @@ public static class ReleaseLifecycleParser
 {
     private static readonly Regex _releaseLifecycleTableRegex = new(
         pattern: @"<section>\n\s+<h2.+?>Releases<\/h2>\n\s+(?'tableData'(?s)<table.+?>.+?<\/table>)",
-        options: RegexOptions.NonBacktracking
+        options: RegexOptions.Compiled
     );
     private static readonly Regex _releaseLifecycleTableDataRegex = new(
         pattern: @"<tr>\n\s+<td>Version (?'versionNumber'.{4})<\/td>\n\s+<td .+?>\n\s+.*(?'startDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).+\n\s+<\/td>\n\s+<td .+?>\n\s+.*(?'endDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).*\n\s+<\/td>\n\s+<\/tr>",
-        options: RegexOptions.NonBacktracking
+        options: RegexOptions.Compiled
     );
 
     /// <summary>
