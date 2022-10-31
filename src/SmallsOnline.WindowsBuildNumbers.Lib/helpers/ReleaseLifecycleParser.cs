@@ -48,7 +48,7 @@ public static class ReleaseLifecycleParser
         List<ReleaseLifecycleInfo> releaseLifecycleInfos = new();
 
         // Loop through each match.
-        foreach (Match tableDataMatch in releaseLifecycleMatch.ToList())
+        foreach (Match tableDataMatch in releaseLifecycleMatch.AsEnumerable())
         {
             // Get the table data.
             string tableData = tableDataMatch.Groups["tableData"].Value;
@@ -57,7 +57,7 @@ public static class ReleaseLifecycleParser
             MatchCollection releaseLifecycleTableDataMatches = _releaseLifecycleTableDataRegex.Matches(tableData);
 
             // Loop through each match from the table data.
-            foreach (Match releaseLifecycleTableDataMatch in releaseLifecycleTableDataMatches.ToList())
+            foreach (Match releaseLifecycleTableDataMatch in releaseLifecycleTableDataMatches.AsEnumerable())
             {
                 // Add a new ReleaseLifecycleInfo item to the list with the data from the match.
                 releaseLifecycleInfos.Add(

@@ -69,7 +69,7 @@ public static class ReleaseParser
         MatchCollection releaseTableMatches = _releaseTableRegex.Matches(releaseMatch.Groups["tableData"].Value);
 
         // Loop through each table row match.
-        foreach (Match releaseTableMatch in releaseTableMatches.ToList())
+        foreach (Match releaseTableMatch in releaseTableMatches.AsEnumerable())
         {
             // Initialize a null support article URL.
             // Typicially if there is not a support article URL,
