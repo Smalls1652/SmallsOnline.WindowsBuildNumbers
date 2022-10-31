@@ -39,7 +39,7 @@ public static class ReleaseParser
     }
 
     /// <summary>
-    /// Parse release info from a Windows featue update release match.
+    /// Parse release info from a Windows feature update release match.
     /// </summary>
     /// <param name="releaseMatch">The feature update release match.</param>
     /// <param name="consumerLifecycleInfo">The consumer lifecycle info for the release.</param>
