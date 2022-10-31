@@ -94,7 +94,7 @@ public class ReleaseInfoGetter : IDisposable
         MatchCollection releaseMatches = ReleaseParser.ParseReleaseInfoContent(responseContent);
 
         // Loop through the matches and add them to the list of release info items.
-        foreach (Match releaseMatch in releaseMatches.ToList())
+        foreach (Match releaseMatch in releaseMatches.AsEnumerable())
         {
             // Get the corresponding consumer and enterprise lifecycle info for the matched feature update release.
             ReleaseLifecycleInfo? consumerReleaseLifecycleInfoItem = consumerReleaseLifecycleInfo.FirstOrDefault(x => x.ReleaseName == releaseMatch.Groups["versionName"].Value);
