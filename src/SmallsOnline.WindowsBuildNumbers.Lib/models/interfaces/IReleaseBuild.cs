@@ -11,6 +11,11 @@ public interface IReleaseBuild
     string BuildNumber { get; set; }
 
     /// <summary>
+    /// The servicing channels that the release is available on.
+    /// </summary>
+    string[] ServicingChannels { get; set; }
+
+    /// <summary>
     /// The date the build was released.
     /// </summary>
     DateTimeOffset ReleaseDate { get; set; }

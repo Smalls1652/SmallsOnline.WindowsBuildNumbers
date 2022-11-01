@@ -11,9 +11,10 @@ public class ReleaseBuild : IReleaseBuild
     [JsonConstructor()]
     public ReleaseBuild() {}
 
-    public ReleaseBuild(string buildNumber, DateTimeOffset releaseDate, string? kbArticleId = null, Uri? kbArticleUrl = null)
+    public ReleaseBuild(string buildNumber, string[] servicingChannels, DateTimeOffset releaseDate, string? kbArticleId = null, Uri? kbArticleUrl = null)
     {
         BuildNumber = buildNumber;
+        ServicingChannels = servicingChannels;
         ReleaseDate = releaseDate;
         KbArticleId = kbArticleId;
         KbArticleUrl = kbArticleUrl;
@@ -22,6 +23,10 @@ public class ReleaseBuild : IReleaseBuild
     /// <inheritdoc />
     [JsonPropertyName("buildNumber")]
     public string BuildNumber { get; set; } = null!;
+
+    /// <inheritdoc />
+    [JsonPropertyName("servicingChannels")]
+    public string[] ServicingChannels { get; set; } = null!;
 
     /// <inheritdoc />
     [JsonPropertyName("releaseDate")]
