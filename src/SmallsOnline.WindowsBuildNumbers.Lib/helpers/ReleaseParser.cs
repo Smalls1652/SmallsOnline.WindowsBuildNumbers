@@ -18,6 +18,11 @@ public static class ReleaseParser
         options: RegexOptions.Compiled
     );
 
+    private readonly static Regex _servicingTableSeparatorRegex = new(
+        pattern: @"\s<span> (?:\u2022|(?:&bull;|(?:&#x2022;|&#8226;))) <\/span>\s",
+        options: RegexOptions.Compiled
+    );
+
     /// <summary>
     /// Parse the release info page's contents for Windows 10/11.
     /// </summary>
@@ -86,6 +91,7 @@ public static class ReleaseParser
             releaseBuilds.Add(
                 new(
                     buildNumber: releaseTableMatch.Groups["buildNumber"].Value,
+                    servicingChannels: SplitServicingChannels(releaseTableMatch.Groups["servicingChannels"].Value),
                     releaseDate: DateTimeOffset.Parse($"{releaseTableMatch.Groups["releaseDate"].Value} 18:00 -0:00"),
                     kbArticleId: releaseTableMatch.Groups["kbArticleId"].Value,
                     kbArticleUrl: supportArticleUrl
@@ -94,5 +100,62 @@ public static class ReleaseParser
         }
 
         return releaseBuilds;
+    }
+
+    /// <summary>
+    /// Split, if possible, the servicing channels from a quality update's servicing channels column.
+    /// </summary>
+    /// <param name="inputString">The captured string of the servicing channel table column.</param>
+    /// <returns>A list of the servicing channels for the quality update.</returns>
+    private static string[] SplitServicingChannels(string inputString)
+    {
+        string[] servicingChannels;
+
+        // If the input string contains the servicing table separator, then split the string.
+        if (_servicingTableSeparatorRegex.IsMatch(inputString))
+        {
+            // Split the string by the separator and normalize the servicing channel name.
+            // Normalizing it helps with consistency since the older releases use acronyms
+            // for the servicing channel names (Eg. CB -> Current Branch or CBB -> Current Branch for Business).
+            servicingChannels = NormalizeServicingChannelString(_servicingTableSeparatorRegex.Split(inputString));
+        }
+        // Otherwise just normalize the string and add it to an array.
+        else
+        {
+            servicingChannels = new string[] { NormalizeServicingChannelString(inputString) };
+        }
+
+        return servicingChannels;
+    }
+
+    /// <summary>
+    /// Normalize the servicing channel string, if needed.
+    /// </summary>
+    /// <param name="servicingChannel">The input servicing channel to normalize.</param>
+    /// <returns>A normalized string of the servicing channel.</returns>
+    /// <exception cref="ArgumentException"></exception>
+    private static string NormalizeServicingChannelString(string servicingChannel) => servicingChannel switch
+    {
+        "LTSB" => "Long-Term Servicing Branch",
+        "LTSC" => "Long-Term Servicing Channel",
+        "CB" => "Current Branch",
+        "CBB" => "Current Branch for Business",
+        "Semi-Annual Channel" or "Semi-Annual Channel (Targeted)" or "General Availability Channel" => servicingChannel,
+        _ => throw new ArgumentException($"Unknown servicing channel: {servicingChannel}")
+    };
+
+    /// <summary>
+    /// Normalize the servicing channel strings, if needed.
+    /// </summary>
+    /// <param name="servicingChannels">The input servicing channels to normalize.</param>
+    /// <returns>Normalized strings of the servicing channels.</returns>
+    private static string[] NormalizeServicingChannelString(string[] servicingChannels)
+    {
+        for (int i = 0; i < servicingChannels.Length; i++)
+        {
+            servicingChannels[i] = NormalizeServicingChannelString(servicingChannels[i]);
+        }
+
+        return servicingChannels;
     }
 }
