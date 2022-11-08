@@ -122,7 +122,7 @@ public static class ReleaseParser
         // Otherwise just normalize the string and add it to an array.
         else
         {
-            servicingChannels = new string[] { NormalizeServicingChannelString(inputString) };
+            servicingChannels = new[] { NormalizeServicingChannelString(inputString) };
         }
 
         return servicingChannels;
