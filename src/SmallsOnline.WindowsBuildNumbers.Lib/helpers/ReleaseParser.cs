@@ -65,7 +65,7 @@ public static class ReleaseParser
     /// </summary>
     /// <param name="releaseMatch">The feature update release match.</param>
     /// <returns>A list of <see cref="ReleaseBuild" /> items.</returns>
-    public static List<ReleaseBuild> ParseReleaseInfoBuilds(Match releaseMatch)
+    public static IEnumerable<ReleaseBuild> ParseReleaseInfoBuilds(Match releaseMatch)
     {
         // Initialize a list to hold the parsed release builds.
         List<ReleaseBuild> releaseBuilds = new();
