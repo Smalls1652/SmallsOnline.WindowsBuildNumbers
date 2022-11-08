@@ -77,8 +77,8 @@ public static class ReleaseParser
         foreach (Match releaseTableMatch in releaseTableMatches.AsEnumerable())
         {
             // Initialize a null support article URL.
-            // Typicially if there is not a support article URL,
-            // it usually means that it's the intial release of the feature update.
+            // Typically if there is not a support article URL,
+            // it usually means that it's the initial release of the feature update.
             Uri? supportArticleUrl = null;
 
             // If a support article URL is found, then set supportArticleUrl to the parsed URL.
