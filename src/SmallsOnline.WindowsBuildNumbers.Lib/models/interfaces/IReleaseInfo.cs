@@ -33,5 +33,5 @@ public interface IReleaseInfo
     /// <summary>
     /// Builds for the release.
     /// </summary>
-    List<ReleaseBuild> ReleaseBuilds { get; set; }
+    IEnumerable<ReleaseBuild>? ReleaseBuilds { get; set; }
 }
