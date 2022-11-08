@@ -10,7 +10,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Helpers;
 public class ReleaseInfoGetter : IDisposable
 {
     private readonly HttpClient _httpClient;
-    private bool _isDisposed = false;
+    private bool _isDisposed;
 
     public ReleaseInfoGetter()
     {
