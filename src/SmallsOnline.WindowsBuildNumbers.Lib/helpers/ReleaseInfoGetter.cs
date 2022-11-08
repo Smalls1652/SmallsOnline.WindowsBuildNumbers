@@ -159,7 +159,7 @@ public class ReleaseInfoGetter : IDisposable
     /// <summary>
     /// Get the release lifecycle info for all feature updates of Windows 10's consumer or enterprise releases.
     /// </summary>
-    /// <param name="skuType">The SKU type to get lifecyle info for.</param>
+    /// <param name="skuType">The SKU type to get lifecycle info for.</param>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
     /// <exception cref="HttpRequestException"></exception>
     public async Task<List<ReleaseLifecycleInfo>> GetWindows10ReleaseLifecycleInfoAsync(SkuType skuType = SkuType.Consumer)
@@ -211,7 +211,7 @@ public class ReleaseInfoGetter : IDisposable
     /// <summary>
     /// Get the release lifecycle info for all feature updates of Windows 11's consumer or enterprise releases.
     /// </summary>
-    /// <param name="skuType">The SKU type to get lifecyle info for.</param>
+    /// <param name="skuType">The SKU type to get lifecycle info for.</param>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
     /// <exception cref="HttpRequestException"></exception>
     public async Task<List<ReleaseLifecycleInfo>> GetWindows11ReleaseLifecycleInfoAsync(SkuType skuType = SkuType.Consumer)
