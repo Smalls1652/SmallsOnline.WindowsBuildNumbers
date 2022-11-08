@@ -65,17 +65,19 @@ public static class ReleaseParser
     /// </summary>
     /// <param name="releaseMatch">The feature update release match.</param>
     /// <returns>A list of <see cref="ReleaseBuild" /> items.</returns>
-    public static IEnumerable<ReleaseBuild> ParseReleaseInfoBuilds(Match releaseMatch)
+    public static ReleaseBuild[] ParseReleaseInfoBuilds(Match releaseMatch)
     {
-        // Initialize a list to hold the parsed release builds.
-        List<ReleaseBuild> releaseBuilds = new();
-
         // Parse the table data from the release match.
         MatchCollection releaseTableMatches = _releaseTableRegex.Matches(releaseMatch.Groups["tableData"].Value);
 
-        // Loop through each table row match.
-        foreach (Match releaseTableMatch in releaseTableMatches.AsEnumerable())
+        // Initialize an array to hold the parsed release builds
+        ReleaseBuild[] releaseBuilds = new ReleaseBuild[releaseTableMatches.Count];
+
+        for (int i = 0; i < releaseTableMatches.Count; i++)
         {
+            // Get the current release table match.
+            Match releaseTableMatch = releaseTableMatches[i];
+
             // Initialize a null support article URL.
             // Typically if there is not a support article URL,
             // it usually means that it's the initial release of the feature update.
@@ -87,15 +89,13 @@ public static class ReleaseParser
                 supportArticleUrl = new(releaseTableMatch.Groups["supportArticleUrl"].Value);
             }
 
-            // Add the release build to the list with the parsed data.
-            releaseBuilds.Add(
-                new(
-                    buildNumber: releaseTableMatch.Groups["buildNumber"].Value,
-                    servicingChannels: SplitServicingChannels(releaseTableMatch.Groups["servicingChannels"].Value),
-                    releaseDate: DateTimeOffset.Parse($"{releaseTableMatch.Groups["releaseDate"].Value} 18:00 -0:00"),
-                    kbArticleId: releaseTableMatch.Groups["kbArticleId"].Value,
-                    kbArticleUrl: supportArticleUrl
-                )
+            // Add the release build to the list.
+            releaseBuilds[i] = new(
+                buildNumber: releaseTableMatch.Groups["buildNumber"].Value,
+                servicingChannels: SplitServicingChannels(releaseTableMatch.Groups["servicingChannels"].Value),
+                releaseDate: DateTimeOffset.Parse($"{releaseTableMatch.Groups["releaseDate"].Value} 18:00 -0:00"),
+                kbArticleId: releaseTableMatch.Groups["kbArticleId"].Value,
+                kbArticleUrl: supportArticleUrl
             );
         }
 

@@ -49,7 +49,7 @@ public class ReleaseInfoGetter : IDisposable
     /// Get the release info for all feature updates of Windows 10.
     /// </summary>
     /// <returns>A list of <see cref="ReleaseInfo" /> items.</returns>
-    public async Task<List<ReleaseInfo>> GetWindowsReleaseInfoAsync() => await GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows10);
+    public async Task<ReleaseInfo[]> GetWindowsReleaseInfoAsync() => await GetWindowsReleaseInfoAsync(MajorWindowsVersion.Windows10);
 
     /// <summary>
     /// Get the release info for all feature updates of a specific major Windows version.
@@ -58,10 +58,10 @@ public class ReleaseInfoGetter : IDisposable
     /// <returns>A list of <see cref="ReleaseInfo" /> items.</returns>
     /// <exception cref="HttpRequestException"></exception>
     /// <exception cref="Exception"></exception>
-    public async Task<List<ReleaseInfo>> GetWindowsReleaseInfoAsync(MajorWindowsVersion windowsVersion = MajorWindowsVersion.Windows10)
+    public async Task<ReleaseInfo[]> GetWindowsReleaseInfoAsync(MajorWindowsVersion windowsVersion)
     {
         // Get the consumer lifecycle info for the specified major Windows version.
-        List<ReleaseLifecycleInfo> consumerReleaseLifecycleInfo = windowsVersion switch
+        ReleaseLifecycleInfo[] consumerReleaseLifecycleInfo = windowsVersion switch
         {
             // Windows 11
             MajorWindowsVersion.Windows11 => await GetWindows11ReleaseLifecycleInfoAsync(SkuType.Consumer),
@@ -71,7 +71,7 @@ public class ReleaseInfoGetter : IDisposable
         };
 
         // Get the enterprise lifecycle info for the specified major Windows version.
-        List<ReleaseLifecycleInfo> enterpriseReleaseLifecycleInfo = windowsVersion switch
+        ReleaseLifecycleInfo[] enterpriseReleaseLifecycleInfo = windowsVersion switch
         {
             // Windows 11
             MajorWindowsVersion.Windows11 => await GetWindows11ReleaseLifecycleInfoAsync(SkuType.Enterprise),
@@ -89,9 +89,6 @@ public class ReleaseInfoGetter : IDisposable
             // Windows 10 (Default)
             _ => ReleaseConstants.Windows10ReleaseInfoUrl
         };
-
-        // Initialize the list of release info items.
-        List<ReleaseInfo> releaseInfoItems = new();
 
         // Initialize the HttpRequestMessage for getting the release info page.
         using HttpRequestMessage requestMessage = new(
@@ -115,36 +112,39 @@ public class ReleaseInfoGetter : IDisposable
         // Parse the response content for feature updates' release info.
         MatchCollection releaseMatches = ReleaseParser.ParseReleaseInfoContent(responseContent);
 
+        // Initialize the list of release info items.
+        ReleaseInfo[] releaseInfoItems = new ReleaseInfo[releaseMatches.Count];
+
         // Loop through the matches and add them to the list of release info items.
-        foreach (Match releaseMatch in releaseMatches.AsEnumerable())
+        for (int i = 0; i < releaseMatches.Count; i++)
         {
             // Get the corresponding consumer and enterprise lifecycle info for the matched feature update release.
-            ReleaseLifecycleInfo? consumerReleaseLifecycleInfoItem = consumerReleaseLifecycleInfo.FirstOrDefault(x => x.ReleaseName == releaseMatch.Groups["versionName"].Value);
-            ReleaseLifecycleInfo? enterpriseReleaseLifecycleInfoItem = enterpriseReleaseLifecycleInfo.FirstOrDefault(x => x.ReleaseName == releaseMatch.Groups["versionName"].Value);
+            ReleaseLifecycleInfo? consumerReleaseLifecycleInfoItem = consumerReleaseLifecycleInfo.FirstOrDefault(x => x.ReleaseName == releaseMatches[i].Groups["versionName"].Value);
+            ReleaseLifecycleInfo? enterpriseReleaseLifecycleInfoItem = enterpriseReleaseLifecycleInfo.FirstOrDefault(x => x.ReleaseName == releaseMatches[i].Groups["versionName"].Value);
 
             // Check if the consumer lifecycle info item was found.
             // If not, throw an exception.
             if (consumerReleaseLifecycleInfoItem is null)
             {
-                throw new Exception($"No consumer release lifecycle info found for release: {releaseMatch.Groups["versionName"].Value}");
+                throw new Exception($"No consumer release lifecycle info found for release: {releaseMatches[i].Groups["versionName"].Value}");
             }
 
             // Check if the enterprise lifecycle info item was found.
             // If not, throw an exception.
             if (enterpriseReleaseLifecycleInfoItem is null)
             {
-                throw new Exception($"No enterprise release lifecycle info found for release: {releaseMatch.Groups["versionName"].Value}");
+                throw new Exception($"No enterprise release lifecycle info found for release: {releaseMatches[i].Groups["versionName"].Value}");
             }
 
             // Generate the ReleaseInfo item with the matched release info and the corresponding consumer and enterprise lifecycle info.
-            ReleaseInfo releaseInfoItem = ReleaseParser.ParseReleaseInfo(releaseMatch, consumerReleaseLifecycleInfoItem, enterpriseReleaseLifecycleInfoItem);
+            ReleaseInfo releaseInfoItem = ReleaseParser.ParseReleaseInfo(releaseMatches[i], consumerReleaseLifecycleInfoItem, enterpriseReleaseLifecycleInfoItem);
 
             // Parse the matched release info for quality update releases
             // and add them to the ReleaseBuilds property of the ReleaseInfo item.
-            releaseInfoItem.ReleaseBuilds.AddRange(ReleaseParser.ParseReleaseInfoBuilds(releaseMatch));
+            releaseInfoItem.ReleaseBuilds = ReleaseParser.ParseReleaseInfoBuilds(releaseMatches[i]);
 
             // Add the created ReleaseInfo item to the list of release info items.
-            releaseInfoItems.Add(releaseInfoItem);
+            releaseInfoItems[i] = releaseInfoItem;
         }
 
         return releaseInfoItems;
@@ -154,7 +154,7 @@ public class ReleaseInfoGetter : IDisposable
     /// Get the release lifecycle info for all feature updates of Windows 10's consumer releases.
     /// </summary>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
-    public async Task<List<ReleaseLifecycleInfo>> GetWindows10ReleaseLifecycleInfoAsync() => await GetWindows10ReleaseLifecycleInfoAsync(SkuType.Consumer);
+    public async Task<ReleaseLifecycleInfo[]> GetWindows10ReleaseLifecycleInfoAsync() => await GetWindows10ReleaseLifecycleInfoAsync(SkuType.Consumer);
 
     /// <summary>
     /// Get the release lifecycle info for all feature updates of Windows 10's consumer or enterprise releases.
@@ -162,7 +162,7 @@ public class ReleaseInfoGetter : IDisposable
     /// <param name="skuType">The SKU type to get lifecycle info for.</param>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
     /// <exception cref="HttpRequestException"></exception>
-    public async Task<List<ReleaseLifecycleInfo>> GetWindows10ReleaseLifecycleInfoAsync(SkuType skuType = SkuType.Consumer)
+    public async Task<ReleaseLifecycleInfo[]> GetWindows10ReleaseLifecycleInfoAsync(SkuType skuType)
     {
         // Get the URL for the release lifecycle info page for the specified SKU type.
         Uri requestUrl = skuType switch
@@ -194,10 +194,10 @@ public class ReleaseInfoGetter : IDisposable
         string responseContent = await responseMsg.Content.ReadAsStringAsync();
 
         // Parse the response content for release lifecycle info.
-        MatchCollection releaseLifecycleMatches = ReleaseLifecycleParser.ParseReleaseLifecycleContent(responseContent);
+        Match releaseLifecycleMatch = ReleaseLifecycleParser.ParseReleaseLifecycleContent(responseContent);
 
         // Initialize the list of release lifecycle info items by parsing the matches.
-        List<ReleaseLifecycleInfo> releaseLifecycleInfos = ReleaseLifecycleParser.ParseReleaseLifecycleTableData(releaseLifecycleMatches);
+        ReleaseLifecycleInfo[] releaseLifecycleInfos = ReleaseLifecycleParser.ParseReleaseLifecycleTableData(releaseLifecycleMatch);
 
         return releaseLifecycleInfos;
     }
@@ -206,7 +206,7 @@ public class ReleaseInfoGetter : IDisposable
     /// Get the release lifecycle info for all feature updates of Windows 11's consumer releases.
     /// </summary>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
-    public async Task<List<ReleaseLifecycleInfo>> GetWindows11ReleaseLifecycleInfoAsync() => await GetWindows11ReleaseLifecycleInfoAsync(SkuType.Consumer);
+    public async Task<ReleaseLifecycleInfo[]> GetWindows11ReleaseLifecycleInfoAsync() => await GetWindows11ReleaseLifecycleInfoAsync(SkuType.Consumer);
 
     /// <summary>
     /// Get the release lifecycle info for all feature updates of Windows 11's consumer or enterprise releases.
@@ -214,7 +214,7 @@ public class ReleaseInfoGetter : IDisposable
     /// <param name="skuType">The SKU type to get lifecycle info for.</param>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
     /// <exception cref="HttpRequestException"></exception>
-    public async Task<List<ReleaseLifecycleInfo>> GetWindows11ReleaseLifecycleInfoAsync(SkuType skuType = SkuType.Consumer)
+    public async Task<ReleaseLifecycleInfo[]> GetWindows11ReleaseLifecycleInfoAsync(SkuType skuType)
     {
         // Get the URL for the release lifecycle info page for the specified SKU type.
         Uri requestUrl = skuType switch
@@ -246,10 +246,10 @@ public class ReleaseInfoGetter : IDisposable
         string responseContent = await responseMsg.Content.ReadAsStringAsync();
 
         // Parse the response content for release lifecycle info.
-        MatchCollection releaseLifecycleMatches = ReleaseLifecycleParser.ParseReleaseLifecycleContent(responseContent);
+        Match releaseLifecycleMatch = ReleaseLifecycleParser.ParseReleaseLifecycleContent(responseContent);
 
         // Initialize the list of release lifecycle info items by parsing the matches.
-        List<ReleaseLifecycleInfo> releaseLifecycleInfos = ReleaseLifecycleParser.ParseReleaseLifecycleTableData(releaseLifecycleMatches);
+        ReleaseLifecycleInfo[] releaseLifecycleInfos = ReleaseLifecycleParser.ParseReleaseLifecycleTableData(releaseLifecycleMatch);
 
         return releaseLifecycleInfos;
     }

@@ -12,8 +12,10 @@ public static class ReleaseLifecycleParser
         pattern: @"<section>\n\s+<h2.+?>Releases<\/h2>\n\s+(?'tableData'(?s)<table.+?>.+?<\/table>)",
         options: RegexOptions.Compiled
     );
+
     private static readonly Regex _releaseLifecycleTableDataRegex = new(
-        pattern: @"<tr>\n\s+<td>Version (?'versionNumber'.{4})<\/td>\n\s+<td .+?>\n\s+.*(?'startDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).+\n\s+<\/td>\n\s+<td .+?>\n\s+.*(?'endDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).*\n\s+<\/td>\n\s+<\/tr>",
+        pattern:
+        @"<tr>\n\s+<td>Version (?'versionNumber'.{4})<\/td>\n\s+<td .+?>\n\s+.*(?'startDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).+\n\s+<\/td>\n\s+<td .+?>\n\s+.*(?'endDate'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}-\d{2}:\d{2}).*\n\s+<\/td>\n\s+<\/tr>",
         options: RegexOptions.Compiled
     );
 
@@ -23,18 +25,18 @@ public static class ReleaseLifecycleParser
     /// <param name="releaseLifecyclePageContent">The content of the lifecycle page.</param>
     /// <returns>A collection of regex matches.</returns>
     /// <exception cref="Exception"></exception>
-    public static MatchCollection ParseReleaseLifecycleContent(string releaseLifecyclePageContent)
+    public static Match ParseReleaseLifecycleContent(string releaseLifecyclePageContent)
     {
         // Get all the matches for each release lifecycle table.
-        MatchCollection releaseLifecycleMatches = _releaseLifecycleTableRegex.Matches(releaseLifecyclePageContent);
+        Match releaseLifecycleMatch = _releaseLifecycleTableRegex.Match(releaseLifecyclePageContent);
 
         // If there are no matches, throw an exception.
-        if (releaseLifecycleMatches.Count == 0)
+        if (!releaseLifecycleMatch.Success)
         {
             throw new Exception("No release lifecycle data found in the release lifecycle page content.");
         }
 
-        return releaseLifecycleMatches;
+        return releaseLifecycleMatch;
     }
 
     /// <summary>
@@ -42,11 +44,26 @@ public static class ReleaseLifecycleParser
     /// </summary>
     /// <param name="releaseLifecycleMatch">The collection of matches to parse.</param>
     /// <returns>A list of <see cref="ReleaseLifecycleInfo" /> items.</returns>
-    public static List<ReleaseLifecycleInfo> ParseReleaseLifecycleTableData(MatchCollection releaseLifecycleMatch)
+    public static ReleaseLifecycleInfo[] ParseReleaseLifecycleTableData(Match releaseLifecycleMatch)
     {
-        // Initialize the list to hold ReleaseLifecycleInfo items.
-        List<ReleaseLifecycleInfo> releaseLifecycleInfos = new();
+        // Get the table data.
+        string tableData = releaseLifecycleMatch.Groups["tableData"].Value;
 
+        // Get all the matches for each release lifecycle table data.
+        MatchCollection releaseLifecycleTableDataMatches = _releaseLifecycleTableDataRegex.Matches(tableData);
+
+        // Initialize the list to hold ReleaseLifecycleInfo items.
+        ReleaseLifecycleInfo[] releaseLifecycleInfos = new ReleaseLifecycleInfo[releaseLifecycleTableDataMatches.Count];
+
+        for (int i = 0; i < releaseLifecycleTableDataMatches.Count; i++)
+        {
+            releaseLifecycleInfos[i] = new(
+                releaseName: releaseLifecycleTableDataMatches[i].Groups["versionNumber"].Value,
+                endOfLifeDate: DateTimeOffset.Parse(releaseLifecycleTableDataMatches[i].Groups["endDate"].Value)
+            );
+        }
+
+        /*
         // Loop through each match.
         foreach (Match tableDataMatch in releaseLifecycleMatch.AsEnumerable())
         {
@@ -68,6 +85,7 @@ public static class ReleaseLifecycleParser
                 );
             }
         }
+        */
 
         return releaseLifecycleInfos;
     }

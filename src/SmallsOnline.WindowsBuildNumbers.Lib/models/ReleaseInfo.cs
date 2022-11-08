@@ -53,7 +53,7 @@ public class ReleaseInfo : IReleaseInfo
 
     /// <inheritdoc />
     [JsonPropertyName("releaseBuilds")]
-    public List<ReleaseBuild> ReleaseBuilds { get; set; } = new();
+    public IEnumerable<ReleaseBuild>? ReleaseBuilds { get; set; }
 
     public override string ToString()
     {
