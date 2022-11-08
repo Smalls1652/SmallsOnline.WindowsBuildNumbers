@@ -23,6 +23,29 @@ public class ReleaseInfoGetter : IDisposable
         _httpClient = httpClient;
     }
 
+    public async Task<string> SendGetRequestAsync(Uri uri)
+    {
+        // Initialize the HttpRequestMessage for getting the release info page.
+        using HttpRequestMessage requestMessage = new(
+            method: HttpMethod.Get,
+            requestUri: uri
+        );
+
+        // Get the release info page.
+        using HttpResponseMessage responseMessage = await _httpClient.SendAsync(requestMessage);
+
+        // Check if the response was successful.
+        // If not, throw an exception.
+        if (responseMessage.StatusCode != HttpStatusCode.OK)
+        {
+            throw new HttpRequestException($"Request failed with status code: {responseMessage.StatusCode}");
+        }
+
+        string responseContent = await responseMessage.Content.ReadAsStringAsync();
+
+        return responseContent;
+    }
+
     /// <summary>
     /// Get the release info for all feature updates of Windows 10.
     /// </summary>
