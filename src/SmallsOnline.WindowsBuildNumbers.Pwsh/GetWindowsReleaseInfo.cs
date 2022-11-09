@@ -18,11 +18,6 @@ public class GetWindowsBuildNumbers : Cmdlet
 
     private readonly ReleaseInfoGetter _releaseInfoGetter = new();
 
-    protected override void BeginProcessing()
-    {
-        base.BeginProcessing();
-    }
-
     protected override void ProcessRecord()
     {
         WriteVerbose($"Getting release info for '{WindowsVersion}'.");
@@ -36,10 +31,5 @@ public class GetWindowsBuildNumbers : Cmdlet
         }
 
         _releaseInfoGetter.Dispose();
-    }
-
-    protected override void StopProcessing()
-    {
-        base.StopProcessing();
     }
 }
