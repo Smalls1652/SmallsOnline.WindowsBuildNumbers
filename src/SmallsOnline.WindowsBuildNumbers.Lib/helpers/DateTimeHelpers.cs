@@ -44,4 +44,14 @@ public static class DateTimeHelpers
 
         return secondTuesdayOfMonth;
     }
+
+    /// <summary>
+    /// Convert a <see cref="DateTimeOffset"/> input to a <see cref="DateOnly"/> value.
+    /// </summary>
+    /// <param name="inputDate">A date/time value.</param>
+    /// <returns>A <see cref="DateOnly"/> output of the input date.</returns>
+    private static DateOnly ConvertToDateOnly(DateTimeOffset inputDate)
+    {
+        return new(inputDate.Year, inputDate.Month, inputDate.Day);
+    }
 }
