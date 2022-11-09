@@ -33,10 +33,7 @@ public class ReleaseBuild : IReleaseBuild
     public DateTimeOffset ReleaseDate { get; set; }
 
     /// <inheritdoc />
-    public bool IsPatchTuesdayRelease
-    {
-        get => DateTimeHelpers.GetSecondTuesdayOfTheMonth(ReleaseDate) == ReleaseDate;
-    }
+    public bool IsPatchTuesdayRelease => DateTimeHelpers.IsSecondTuesdayOfTheMonth(ReleaseDate);
 
     /// <inheritdoc />
     [JsonPropertyName("kbArticleId")]

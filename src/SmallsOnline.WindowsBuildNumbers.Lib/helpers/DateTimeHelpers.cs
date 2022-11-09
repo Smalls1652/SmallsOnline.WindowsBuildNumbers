@@ -6,18 +6,30 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Helpers;
 public static class DateTimeHelpers
 {
     /// <summary>
+    /// Get whether the input date is the second Tuesday of the month.
+    /// </summary>
+    /// <param name="inputDate">A date/time value.</param>
+    /// <returns>Whether the input date is the second Tuesday of the month.</returns>
+    public static bool IsSecondTuesdayOfTheMonth(DateTimeOffset inputDate)
+    {
+        DateOnly inputDateOnly = ConvertToDateOnly(inputDate);
+
+        return inputDateOnly == GetSecondTuesdayOfTheMonth(inputDate);
+    }
+
+    /// <summary>
     /// Get the second Tuesday of a month.
     /// </summary>
     /// <param name="inputDate">The input date to get.</param>
     /// <returns>The second Tuesday of the month.</returns>
-    public static DateTimeOffset GetSecondTuesdayOfTheMonth(DateTimeOffset inputDate)
+    public static DateOnly GetSecondTuesdayOfTheMonth(DateTimeOffset inputDate)
     {
         // Create a new DateTimeOffset for the first of the month from the input date.
-        DateTimeOffset firstDateOfMonth = new(inputDate.Year, inputDate.Month, 1, 0, 0, 0, inputDate.Offset);
+        DateOnly firstDateOfMonth = new(inputDate.Year, inputDate.Month, 1);
 
         // Generate a DateTimeOffset for the second Tuesday of the month.
         // This is done by determining if the first date of the month is a Tuesday or not.
-        DateTimeOffset firstTuesdayOfMonth = (firstDateOfMonth.DayOfWeek == DayOfWeek.Tuesday) switch
+        DateOnly firstTuesdayOfMonth = (firstDateOfMonth.DayOfWeek == DayOfWeek.Tuesday) switch
         {
             // If the first date of the month is not a Tuesday,
             // subtract the DayOfWeek value for Tuesday from the DayOfWeek value for the first date of the month.
@@ -31,7 +43,7 @@ public static class DateTimeHelpers
 
         // Generate a DateTimeOffset for the second Tuesday of the month.
         // This is done by determining if the first Tuesday of the month is less than the first date of the month.
-        DateTimeOffset secondTuesdayOfMonth = (firstTuesdayOfMonth.Month < firstDateOfMonth.Month) switch
+        DateOnly secondTuesdayOfMonth = (firstTuesdayOfMonth.Month < firstDateOfMonth.Month) switch
         {
             // If the first Tuesday of the month is not less than the first date of the month,
             // then add 7 days to the first Tuesday of the month.
@@ -43,5 +55,15 @@ public static class DateTimeHelpers
         };
 
         return secondTuesdayOfMonth;
+    }
+
+    /// <summary>
+    /// Convert a <see cref="DateTimeOffset"/> input to a <see cref="DateOnly"/> value.
+    /// </summary>
+    /// <param name="inputDate">A date/time value.</param>
+    /// <returns>A <see cref="DateOnly"/> output of the input date.</returns>
+    private static DateOnly ConvertToDateOnly(DateTimeOffset inputDate)
+    {
+        return new(inputDate.Year, inputDate.Month, inputDate.Day);
     }
 }
