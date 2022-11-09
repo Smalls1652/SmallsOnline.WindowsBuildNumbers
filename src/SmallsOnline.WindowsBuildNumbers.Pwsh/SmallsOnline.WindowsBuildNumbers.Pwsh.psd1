@@ -101,13 +101,20 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @(
+            "Windows",
+            "Cross-platform",
+            "Release health",
+            "Windows release health",
+            "Windows Update",
+            "Windows builds"
+        )
 
         # A URL to the license for this module.
-        # LicenseUri = ""
+        LicenseUri = "https://raw.githubusercontent.com/Smalls1652/SmallsOnline.WindowsBuildNumbers/main/LICENSE"
 
         # A URL to the main website for this project.
-        # ProjectUri = ""
+        ProjectUri = "https://github.com/Smalls1652/SmallsOnline.WindowsBuildNumbers"
 
         # A URL to an icon representing this module.
         # IconUri = ""
@@ -119,7 +126,7 @@ PrivateData = @{
         # Prerelease = ""
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-        # RequireLicenseAcceptance = $false
+        RequireLicenseAcceptance = $false
 
         # External dependent modules of this module
         # ExternalModuleDependencies = @()
