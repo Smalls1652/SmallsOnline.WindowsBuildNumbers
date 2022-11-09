@@ -1,0 +1,35 @@
+name: Publish PowerShell module
+
+on:
+  # Automatically trigger it when detected changes in repo
+  # for tagged releases matching 'v*.*.*'
+  push:
+    tags: [ 'v*.*.*', 'v*.*.*-*' ]
+
+jobs:
+    build-and-publish:
+      name: Build and publish
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+         dotnet-version: '7.x'
+
+      - name: Restore 'SmallsOnline.WindowsBuildNumbers.Pwsh'
+        shell: pwsh
+        run: dotnet restore ./src/SmallsOnline.WindowsBuildNumbers.Pwsh/
+
+      - name: Build 'SmallsOnline.WindowsBuildNumbers.Pwsh'
+        shell: pwsh
+        run: dotnet publish ./src/SmallsOnline.WindowsBuildNumbers.Pwsh/ --configuration Release --output "./build/SmallsOnline.WindowsBuildNumbers.Pwsh/"
+
+      - name: Publish module to PowerShell Gallery
+        shell: pwsh
+        run: Publish-Module -Path "./build/SmallsOnline.WindowsBuildNumbers.Pwsh/" -NuGetApiKey "${{ secrets.PWSH_GALLERY_KEY }}" -Repository "PSGallery"
