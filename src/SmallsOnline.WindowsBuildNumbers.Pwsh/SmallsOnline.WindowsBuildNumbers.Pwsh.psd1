@@ -103,11 +103,11 @@ PrivateData = @{
         # Tags applied to this module. These help with module discovery in online galleries.
         Tags = @(
             "Windows",
-            "Cross-platform",
-            "Release health",
-            "Windows release health",
-            "Windows Update",
-            "Windows builds"
+            "CrossPlatform",
+            "ReleaseHealth",
+            "WindowsReleaseHealth",
+            "WindowsUpdate",
+            "WindowsBuilds"
         )
 
         # A URL to the license for this module.
