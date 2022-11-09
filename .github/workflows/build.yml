@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+name: Build
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  build:
+    name: Build projects
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ 'net6.0', 'net7.0' ]
+    env:
+      DOTNET_NOLOGO: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup dotnet SDK
+        uses: actions/setup-dotnet@v3
+        with:
+         dotnet-version: |
+           6.x
+           7.x
+
+      - name: Build 'SmallsOnline.WindowsBuildNumbers.Lib'
+        shell: pwsh
+        run: dotnet build ./src/SmallsOnline.WindowsBuildNumbers.Lib/ --configuration Debug --framework '${{ matrix.dotnet-version }}'
+
+      - name: Build 'SmallsOnline.WindowsBuildNumbers.Pwsh'
+        if: ${{ matrix.dotnet-version == 'net6.0' }}
+        shell: pwsh
+        run: dotnet build ./src/SmallsOnline.WindowsBuildNumbers.Pwsh/ --configuration Debug
