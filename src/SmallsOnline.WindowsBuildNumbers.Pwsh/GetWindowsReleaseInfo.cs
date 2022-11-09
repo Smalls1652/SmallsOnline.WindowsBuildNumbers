@@ -20,16 +20,20 @@ public class GetWindowsBuildNumbers : Cmdlet
 
     protected override void ProcessRecord()
     {
+        // Get the release information for the specified version of Windows.
+        // Todo: Look into optimizing the async call.
         WriteVerbose($"Getting release info for '{WindowsVersion}'.");
         ReleaseInfo[] releases = _releaseInfoGetter.GetWindowsReleaseInfoAsync(
             windowsVersion: WindowsVersion
         ).GetAwaiter().GetResult();
 
+        // Write each release to the standard output.
         foreach (ReleaseInfo releaseItem in releases)
         {
             WriteObject(releaseItem);
         }
 
+        // Dispose the ReleaseInfoGetter.
         _releaseInfoGetter.Dispose();
     }
 }
