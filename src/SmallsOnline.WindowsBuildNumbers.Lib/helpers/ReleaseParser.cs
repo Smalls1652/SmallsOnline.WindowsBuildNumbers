@@ -8,17 +8,17 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Helpers;
 /// </summary>
 public static class ReleaseParser
 {
-    private readonly static Regex _releaseRegex = new(
+    private static readonly Regex _releaseRegex = new(
         pattern: @"<strong>Version (?'versionName'.{4})(?>\s\(RTM\)|) \(OS build (?'versionBuild'\d+)\)<\/strong>(?:(?:\n) - (?'isEoL'End of servicing)|)(?:(?s).+?)<table.+?>\n<tr>(?:\s*<th>.+?<\/th>){4}\n\s*<\/tr>(?'tableData'(?s).+?)\n<\/table>",
         options: RegexOptions.Compiled
     );
 
-    private readonly static Regex _releaseTableRegex = new(
+    private static readonly Regex _releaseTableRegex = new(
         pattern: @"<tr>\n<td>(?'servicingChannels'.+?)<\/td>\n<td>(?'releaseDate'\d{4}-\d{2}-\d{2})<\/td>\n<td>(?'buildNumber'.+?)<\/td>\n<td>(?:<a href=""(?'supportArticleUrl'.+?)"".+?>(?'kbArticleId'.+?)<\/a>|)<\/td>\n<\/tr>",
         options: RegexOptions.Compiled
     );
 
-    private readonly static Regex _servicingTableSeparatorRegex = new(
+    private static readonly Regex _servicingTableSeparatorRegex = new(
         pattern: @"\s<span> (?:\u2022|(?:&bull;|(?:&#x2022;|&#8226;))) <\/span>\s",
         options: RegexOptions.Compiled
     );
