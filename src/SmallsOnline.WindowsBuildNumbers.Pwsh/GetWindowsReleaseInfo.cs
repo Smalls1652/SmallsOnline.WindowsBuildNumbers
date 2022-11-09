@@ -8,6 +8,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Pwsh;
 /// Get release information for Windows 10/11 feature updates.
 /// </summary>
 [Cmdlet(verbName: VerbsCommon.Get, nounName: "WindowsReleaseInfo")]
+[OutputType(typeof(ReleaseInfo[]))]
 public class GetWindowsBuildNumbers : Cmdlet
 {
     /// <summary>
