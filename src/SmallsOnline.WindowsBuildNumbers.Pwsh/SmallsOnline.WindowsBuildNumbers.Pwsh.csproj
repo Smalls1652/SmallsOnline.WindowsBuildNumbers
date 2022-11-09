@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>SmallsOnline.WindowsBuildNumbers.Pwsh</PackageId>
+        <Authors>Timothy Small</Authors>
+        <Company>Smalls.Online</Company>
+        <RepositoryUrl>https://github.com/Smalls1652/SmallsOnline.WindowsBuildNumbers</RepositoryUrl>
+        <VersionPrefix>0.0.1</VersionPrefix>
+        <Description>
+            A PowerShell module for getting Windows 10/11 release information.
+        </Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>none</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.2.*">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>compile</IncludeAssets>
+        </PackageReference>
+      <ProjectReference Include="..\SmallsOnline.WindowsBuildNumbers.Lib\SmallsOnline.WindowsBuildNumbers.Lib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SmallsOnline.WindowsBuildNumbers.Pwsh.psd1">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+</Project>
