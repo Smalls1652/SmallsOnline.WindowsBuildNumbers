@@ -6,6 +6,18 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Helpers;
 public static class DateTimeHelpers
 {
     /// <summary>
+    /// Get whether the input date is the second Tuesday of the month.
+    /// </summary>
+    /// <param name="inputDate">A date/time value.</param>
+    /// <returns>Whether the input date is the second Tuesday of the month.</returns>
+    public static bool IsSecondTuesdayOfTheMonth(DateTimeOffset inputDate)
+    {
+        DateOnly inputDateOnly = ConvertToDateOnly(inputDate);
+
+        return inputDateOnly == GetSecondTuesdayOfTheMonth(inputDate);
+    }
+
+    /// <summary>
     /// Get the second Tuesday of a month.
     /// </summary>
     /// <param name="inputDate">The input date to get.</param>
