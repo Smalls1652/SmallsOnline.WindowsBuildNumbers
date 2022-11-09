@@ -7,7 +7,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Models;
 /// </summary>
 public class ReleaseInfo : IReleaseInfo
 {
-    [JsonConstructor()]
+    [JsonConstructor]
     public ReleaseInfo() {}
 
     public ReleaseInfo(string releaseName, DateTimeOffset? consumerEoLDate, DateTimeOffset? enterpriseEoLDate)

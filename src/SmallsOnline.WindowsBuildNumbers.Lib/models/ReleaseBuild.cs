@@ -8,7 +8,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Models;
 /// </summary>
 public class ReleaseBuild : IReleaseBuild
 {
-    [JsonConstructor()]
+    [JsonConstructor]
     public ReleaseBuild() {}
 
     public ReleaseBuild(string buildNumber, string[] servicingChannels, DateTimeOffset releaseDate, string? kbArticleId = null, Uri? kbArticleUrl = null)

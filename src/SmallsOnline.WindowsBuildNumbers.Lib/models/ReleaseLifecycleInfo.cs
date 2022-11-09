@@ -4,7 +4,7 @@ namespace SmallsOnline.WindowsBuildNumbers.Lib.Models;
 
 public class ReleaseLifecycleInfo : IReleaseLifecycleInfo
 {
-    [JsonConstructor()]
+    [JsonConstructor]
     public ReleaseLifecycleInfo() {}
 
     public ReleaseLifecycleInfo(string releaseName, DateTimeOffset endOfLifeDate)
