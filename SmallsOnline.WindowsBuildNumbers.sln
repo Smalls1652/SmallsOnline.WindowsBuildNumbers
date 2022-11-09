@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallsOnline.WindowsBuildNu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallsOnline.WindowsBuildNumbers.Pwsh", "src\SmallsOnline.WindowsBuildNumbers.Pwsh\SmallsOnline.WindowsBuildNumbers.Pwsh.csproj", "{736965EE-C9A8-4D27-B322-C527995296BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmallsOnline.WindowsBuildNumbers.version", "SmallsOnline.WindowsBuildNumbers.version.proj", "{07F0F56C-CC6B-44A9-B541-1CA0BB6990C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
