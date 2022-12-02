@@ -111,7 +111,7 @@ ReleaseBuilds     : {22000.1281, 22000.1219, 22000.1165, 22000.1100…}
 
 #### Example 03
 
-Get the release info for a specific feature update release of Windows 11 and list all build of that feature update.
+Get the release info for a specific feature update release of Windows 11 and list all quality update builds for that feature update.
 
 ```powershell
 PS > $win11Release = Get-WindowsReleaseInfo -WindowsVersion Windows11 -ReleaseName "22H2"
