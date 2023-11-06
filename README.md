@@ -45,12 +45,6 @@ Right now there are two components currently available for use:
 
 ### PowerShell Module
 
-> **⚠️ Note**
->  
-> The PowerShell module **requires** PowerShell 7.2 or higher to run.
->  
-> There are no plans at the moment to support Windows Powershell 5.1, which is installed on Windows 10/11 by default, due to the reliance on targetting .NET 6 and higher.
-
 You can install the [PowerShell module from the PowerShell Gallery](https://www.powershellgallery.com/packages/SmallsOnline.WindowsBuildNumbers.Pwsh) by running the following command in a PowerShell console:
 
 ```powershell

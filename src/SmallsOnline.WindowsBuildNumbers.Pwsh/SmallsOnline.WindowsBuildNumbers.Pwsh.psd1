@@ -12,10 +12,11 @@
 RootModule = "SmallsOnline.WindowsBuildNumbers.Pwsh.dll"
 
 # Version number of this module.
-ModuleVersion = "1.0.0"
+ModuleVersion = "1.1.0"
 
 # Supported PSEditions
 CompatiblePSEditions = @(
+    "Desktop",
     "Core"
 )
 
@@ -35,7 +36,7 @@ Copyright = "2022"
 Description = "Get release information about Windows 10/11 feature updates."
 
 # Minimum version of the PowerShell engine required by this module
-PowerShellVersion = "7.2.0"
+PowerShellVersion = "5.1.0"
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ""
